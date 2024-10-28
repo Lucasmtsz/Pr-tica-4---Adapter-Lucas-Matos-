@@ -1,0 +1,65 @@
+public class Main {
+    interface PinoRedondo {
+        double getRaio();
+    }
+
+    static class PinoRedondoConcreto implements PinoRedondo {
+        private double raio;
+
+        public PinoRedondoConcreto(double raio) {
+            this.raio = raio;
+        }
+
+        @Override
+        public double getRaio() {
+            return raio;
+        }
+    }
+
+    static class PinoQuadrado {
+        private double largura;
+
+        public PinoQuadrado(double largura) {
+            this.largura = largura;
+        }
+
+        public double getLargura() {
+            return largura;
+        }
+    }
+
+    static class AdaptadorPinoQuadrado implements PinoRedondo {
+        private PinoQuadrado pinoQuadrado;
+
+        public AdaptadorPinoQuadrado(PinoQuadrado pinoQuadrado) {
+            this.pinoQuadrado = pinoQuadrado;
+        }
+
+        @Override
+        public double getRaio() {
+            return pinoQuadrado.getLargura() / Math.sqrt(2);
+        }
+    }
+
+    static class BuracoRedondo {
+        private double raio;
+
+        public BuracoRedondo(double raio) {
+            this.raio = raio;
+        }
+
+        public boolean encaixa(PinoRedondo pino) {
+            return pino.getRaio() <= raio;
+        }
+    }
+
+    public static void main(String[] args) {
+        BuracoRedondo buraco = new BuracoRedondo(5.0);
+        PinoRedondo pinoRedondo = new PinoRedondoConcreto(4.0);
+        System.out.println("Pino Redondo se encaixa: " + buraco.encaixa(pinoRedondo));
+        
+        PinoQuadrado pinoQuadrado = new PinoQuadrado(5.0);
+        AdaptadorPinoQuadrado adaptador = new AdaptadorPinoQuadrado(pinoQuadrado);
+        System.out.println("Pino Quadrado adaptado se encaixa: " + buraco.encaixa(adaptador));
+    }
+}
